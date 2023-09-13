@@ -11,11 +11,13 @@
 </head>
 
 <body>
+    
     <div id="app">
         <img src="./1.png" style="width: 100%;">
+        <img src="./6.png"  v-if="!isUnlocked" style="width: 100%;">
         <div class="btnss">
             <div class="slider-unlock-button">
-                <div class="slider-track" id="track" :style="{backgroundColor:isUnlocked?'#ccc':''}">
+                <div class="slider-track" id="track" :style="{backgroundColor:isUnlocked?'#E1E1E1':''}">
                     <div class="slider-handle" v-if="showBtn" @mousedown="startDrag" @touchstart="startDrag"
                         ref="handle" :class="{ unlocked: isUnlocked }"
                         :style="{ transform: `translateX(${handlePosition}px)` }">
@@ -26,8 +28,8 @@
                     <div class="text" v-if="!isUnlocked">
                         <span>クーポンを利用する</span>
                     </div>
-                    <div class="text" style="color: #000;" v-else>
-                        <span>こちらのクーポンを利用しますか</span>
+                    <div class="text" style="color: #2d2d2d;" v-else>
+                        <span>ご利用済みのクーポンです</span>
                     </div>
                 </div>
             </div>
@@ -37,13 +39,14 @@
         <img src="./4.png" style="width: 100%;">
         <van-popup v-model="show" :close-on-click-overlay="false">
             <div class="pop">
-                <p>こちらのクーポンを利用しますか</p>
+                <img src="5.png" style="width: 100%;" alt="" @click="onClose">
+                <!-- <p>こちらのクーポンを利用しますか</p>
                 <div class="" style="margin-top: 50px;">
                     <van-button block color="#000" @click="onClose">利用する</van-button>
                     <van-button block color="#fff" @click="onClose" style="margin-top: 12px;">
                         <div style="color: #000;">利用しない</div>
                     </van-button>
-                </div>
+                </div> -->
             </div>
 
         </van-popup>
@@ -135,8 +138,8 @@
 </body>
 <style>
     .pop {
-        width: calc(100vw - 100px);
-        padding: 25px 25px;
+        width: calc(100vw - 50px);
+        /* padding: 25px 25px; */
         text-align: center;
     }
 
@@ -165,13 +168,12 @@
 
     .slider-unlock-button {
         width: 300px;
-        height: 60px;
-        border: 1px solid #ccc;
+        height: 56px;
         border-radius: 30px;
         overflow: hidden;
         text-align: center;
         position: relative;
-        margin: 32px auto;
+        margin: 16px auto;
     }
 
     .text {
@@ -181,10 +183,11 @@
         top: 50%;
         transform: translate(-50%, -50%);
         color: #fff;
+        font-size: 14px;
     }
 
     .text-mask {
-        height: 60px;
+        height: 56px;
         transition: transform 0.3s ease-in-out;
         background-color: #000;
         position: absolute;
@@ -202,7 +205,7 @@
     }
 
     .slider-handle {
-        width: 58px;
+        width: 54px;
         margin-top: 2px;
         height: calc(100% - 4px);
         margin-left: 2px;
