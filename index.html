@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>戻る</title>
+    <link rel="stylesheet" href="index.min.css" />
+    <script src="vue.min.js"></script>
+    <script src="vant.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <img src="./1.png" style="width: 100%;">
+        <div class="btnss">
+            <div class="slider-unlock-button">
+                <div class="slider-track" id="track" :style="{backgroundColor:isUnlocked?'#ccc':''}">
+                    <div class="slider-handle" v-if="showBtn" @mousedown="startDrag" @touchstart="startDrag"
+                        ref="handle" :class="{ unlocked: isUnlocked }"
+                        :style="{ transform: `translateX(${handlePosition}px)` }">
+                        <van-icon name="arrow" size="24" />
+                    </div>
+                    <div class="text-mask" v-if="!isUnlocked"
+                        :style="{ width: `${handlePosition}px`,backgroundColor:isUnlocked?'#ccc':'' }"></div>
+                    <div class="text" v-if="!isUnlocked">
+                        <span>クーポンを利用する</span>
+                    </div>
+                    <div class="text" style="color: #000;" v-else>
+                        <span>こちらのクーポンを利用しますか</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <img src="./2.png" style="width: 100%;">
+        <img src="./4.png" style="width: 100%;">
+        <van-popup v-model="show" :close-on-click-overlay="false">
+            <div class="pop">
+                <p>こちらのクーポンを利用しますか</p>
+                <div class="" style="margin-top: 50px;">
+                    <van-button block color="#000" @click="onClose">利用する</van-button>
+                    <van-button block color="#fff" @click="onClose" style="margin-top: 12px;">
+                        <div style="color: #000;">利用しない</div>
+                    </van-button>
+                </div>
+            </div>
+
+        </van-popup>
+    </div>
+    <script>
+        new Vue({
+            el: "#app",
+            data() {
+                return {
+                    isDragging: false,
+                    isUnlocked: false,
+                    handlePosition: 0,
+                    trackWidth: 0,
+                    unlockThreshold: 250, // 定义解锁的阈值
+                    height: 60,
+                    showBtn: true,
+                    show: false
+                };
+            },
+            mouned() { },
+            methods: {
+                startDrag(event) {
+                    event.preventDefault();
+                    this.isDragging = true;
+                    this.trackWidth = document.getElementById("track").clientWidth;
+
+                    window.addEventListener("mousemove", this.drag);
+                    window.addEventListener("touchmove", this.drag);
+                    window.addEventListener("mouseup", this.stopDrag);
+                    window.addEventListener("touchend", this.stopDrag);
+                },
+                drag(event) {
+                    if (this.isDragging) {
+                        const clientX =
+                            event.type === "touchmove" ?
+                                event.touches[0].clientX :
+                                event.clientX;
+                        const newPosition = Math.min(
+                            this.trackWidth,
+                            Math.max(
+                                0,
+                                clientX -
+                                document.getElementById("track").getBoundingClientRect()
+                                    .left
+                            )
+                        );
+
+                        this.handlePosition =
+                            newPosition > this.trackWidth - this.height ?
+                                this.trackWidth - this.height :
+                                newPosition;
+
+                        if (newPosition >= this.unlockThreshold) {
+                            this.isUnlocked = true;
+                        }
+                    }
+                },
+                stopDrag() {
+                    if (this.isDragging) {
+                        this.isDragging = false;
+                        window.removeEventListener("mousemove", this.drag);
+                        window.removeEventListener("touchmove", this.drag);
+                        window.removeEventListener("mouseup", this.stopDrag);
+                        window.removeEventListener("touchend", this.stopDrag);
+
+                        if (!this.isUnlocked) {
+                            this.handlePosition = 0;
+                        } else {
+                            this.handlePosition = this.trackWidth - this.height;
+                            this.show = true
+                            /* vant.Dialog.alert({
+                                title: "标题",
+                                message: "滑动结束",
+                            }).then(() => {
+                                // on close
+                                this.showBtn = false
+                                
+                            }); */
+                        }
+                    }
+                },
+                onClose() {
+                    this.showBtn = false
+                    this.show = false
+                },
+            },
+        });
+    </script>
+</body>
+<style>
+    .pop {
+        width: calc(100vw - 100px);
+        padding: 25px 25px;
+        text-align: center;
+    }
+
+    body,
+    #app {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        background-color: #F6F6F6;
+        flex-direction: column;
+    }
+
+    #app {
+        width: calc(100% - 0);
+        border-radius: 16px;
+        box-shadow: -2px -2px 20px 0px #bdbaba;
+    }
+
+    .btnss {
+        background-image: url('./3.png');
+        width: 100%;
+        position: relative;
+        background-size: 100%;
+        background-position: center;
+    }
+
+    .slider-unlock-button {
+        width: 300px;
+        height: 60px;
+        border: 1px solid #ccc;
+        border-radius: 30px;
+        overflow: hidden;
+        text-align: center;
+        position: relative;
+        margin: 32px auto;
+    }
+
+    .text {
+        width: calc(100% - 80px);
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        color: #fff;
+    }
+
+    .text-mask {
+        height: 60px;
+        transition: transform 0.3s ease-in-out;
+        background-color: #000;
+        position: absolute;
+        left: 0;
+        z-index: 1;
+    }
+
+    .slider-track {
+        width: 100%;
+        height: calc(100%);
+        background-color: #000;
+        position: relative;
+        cursor: pointer;
+
+    }
+
+    .slider-handle {
+        width: 58px;
+        margin-top: 2px;
+        height: calc(100% - 4px);
+        margin-left: 2px;
+        background-color: #fff;
+        position: absolute;
+        /* transition: transform 0.1s ease-in-out; */
+        cursor: pointer;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .van-icon-arrow:before {
+        font-weight: 600;
+    }
+</style>
+
+</html>
