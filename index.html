@@ -4,27 +4,24 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>戻る</title>
+    <title></title>
     <link rel="stylesheet" href="index.min.css" />
     <script src="vue.min.js"></script>
     <script src="vant.min.js"></script>
 </head>
 
 <body>
-    
+
     <div id="app">
         <img src="./1.png" style="width: 100%;">
-        <img src="./6.png"  v-if="!isUnlocked" style="width: 100%;">
+        <img src="./6.png" v-if="!isUnlocked" style="width: 100%;">
         <div class="btnss">
             <div class="slider-unlock-button">
                 <div class="slider-track" id="track" :style="{backgroundColor:isUnlocked?'#E1E1E1':''}">
-                    <div class="slider-handle" v-if="showBtn" @mousedown="startDrag" @touchstart="startDrag"
-                        ref="handle" :class="{ unlocked: isUnlocked }"
-                        :style="{ transform: `translateX(${handlePosition}px)` }">
+                    <div class="slider-handle" v-if="showBtn" @mousedown="startDrag" @touchstart="startDrag" ref="handle" :class="{ unlocked: isUnlocked }" :style="{ transform: `translateX(${handlePosition}px)` }">
                         <van-icon name="arrow" size="24" />
                     </div>
-                    <div class="text-mask" v-if="!isUnlocked"
-                        :style="{ width: `${handlePosition}px`,backgroundColor:isUnlocked?'#ccc':'' }"></div>
+                    <div class="text-mask" v-if="!isUnlocked" :style="{ width: `${handlePosition}px`,backgroundColor:isUnlocked?'#ccc':'' }"></div>
                     <div class="text" v-if="!isUnlocked">
                         <span>クーポンを利用する</span>
                     </div>
@@ -66,7 +63,7 @@
                     show: false
                 };
             },
-            mouned() { },
+            mouned() {},
             methods: {
                 startDrag(event) {
                     event.preventDefault();
@@ -82,22 +79,22 @@
                     if (this.isDragging) {
                         const clientX =
                             event.type === "touchmove" ?
-                                event.touches[0].clientX :
-                                event.clientX;
+                            event.touches[0].clientX :
+                            event.clientX;
                         const newPosition = Math.min(
                             this.trackWidth,
                             Math.max(
                                 0,
                                 clientX -
                                 document.getElementById("track").getBoundingClientRect()
-                                    .left
+                                .left
                             )
                         );
 
                         this.handlePosition =
                             newPosition > this.trackWidth - this.height ?
-                                this.trackWidth - this.height :
-                                newPosition;
+                            this.trackWidth - this.height :
+                            newPosition;
 
                         if (newPosition >= this.unlockThreshold) {
                             this.isUnlocked = true;
@@ -117,14 +114,14 @@
                         } else {
                             this.handlePosition = this.trackWidth - this.height;
                             this.show = true
-                            /* vant.Dialog.alert({
-                                title: "标题",
-                                message: "滑动结束",
-                            }).then(() => {
-                                // on close
-                                this.showBtn = false
-                                
-                            }); */
+                                /* vant.Dialog.alert({
+                                    title: "标题",
+                                    message: "滑动结束",
+                                }).then(() => {
+                                    // on close
+                                    this.showBtn = false
+                                    
+                                }); */
                         }
                     }
                 },
@@ -142,7 +139,7 @@
         /* padding: 25px 25px; */
         text-align: center;
     }
-
+    
     body,
     #app {
         min-height: 100vh;
@@ -151,13 +148,13 @@
         background-color: #F6F6F6;
         flex-direction: column;
     }
-
+    
     #app {
         width: calc(100% - 0);
         border-radius: 16px;
         box-shadow: -2px -2px 20px 0px #bdbaba;
     }
-
+    
     .btnss {
         background-image: url('./3.png');
         width: 100%;
@@ -165,7 +162,7 @@
         background-size: 100%;
         background-position: center;
     }
-
+    
     .slider-unlock-button {
         width: 300px;
         height: 56px;
@@ -175,7 +172,7 @@
         position: relative;
         margin: 16px auto;
     }
-
+    
     .text {
         width: calc(100% - 80px);
         position: absolute;
@@ -185,7 +182,7 @@
         color: #fff;
         font-size: 14px;
     }
-
+    
     .text-mask {
         height: 56px;
         transition: transform 0.3s ease-in-out;
@@ -194,16 +191,15 @@
         left: 0;
         z-index: 1;
     }
-
+    
     .slider-track {
         width: 100%;
         height: calc(100%);
         background-color: #000;
         position: relative;
         cursor: pointer;
-
     }
-
+    
     .slider-handle {
         width: 54px;
         margin-top: 2px;
@@ -218,6 +214,7 @@
         justify-content: center;
         align-items: center;
     }
+    
     .van-icon-arrow:before {
         font-weight: 600;
     }
