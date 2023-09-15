@@ -14,6 +14,8 @@
 
     <div id="app">
         <img src="./1.png" style="width: 100%;">
+        <img src="./8.png" v-if="!isUnlocked" style="width: 100%;">
+        <img src="./7.png" v-if="isUnlocked" style="width: 100%;">
         <img src="./6.png" v-if="!isUnlocked" style="width: 100%;">
         <div class="btnss">
             <div class="slider-unlock-button">
